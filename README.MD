@@ -29,3 +29,6 @@ you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
 To change the artifact folder:
 
     $ dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono --artifacts="./path-to-artifact-folder/"
+
+You can also run `dotnet tool restore`
+and then use `dotnet dotnet-benchmark ...`
