@@ -19,7 +19,12 @@ jobs:
         dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore
-    - name: Build
+    - name: Build Solution
       run: dotnet build --configuration Release --no-restore
-    - name: Test
+    - name: Run Tests
       run: dotnet test --no-restore --verbosity minimal
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        name: Prime.WebApi
+        path: /home/runner/work/Prime/Prime.WebApi/bin/Release/netcoreapp3.1
