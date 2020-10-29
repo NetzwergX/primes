@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Service.Tests", "Prim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Service.Benchmarks", "Prime.Service.Benchmarks\Prime.Service.Benchmarks.csproj", "{A695913B-00CB-43DE-96C5-E2619698CE47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Webapi", "Prime.Webapi\Prime.Webapi.csproj", "{A189C295-0B13-42A4-8F2C-9507C8438EC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Webapi", "Prime.WebApi\Prime.Webapi.csproj", "{A189C295-0B13-42A4-8F2C-9507C8438EC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
