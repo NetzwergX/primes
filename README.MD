@@ -1,0 +1,36 @@
+# Primes
+
+is a tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
+for a REST API which is consumed by an SPA app (using Aurelia) with
+
+* unit tests
+* integration tests
+* benchmarks (report generation)
+* [WIP] E2E tests
+* [WIP] Load tests
+* [WIP] stress tests
+
+# License
+
+(The MIT License)
+
+Copyright &copy; 2020 Sebastian Teumert &lt;https://sebastian.teumert.net&gt;
+
+[See LICENSE](/LICENSE)
+
+# Benchmarks
+
+In order to use `dotnet benchmark`,
+you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
+
+    $ dotnet build -C Release
+    $ dotnet benchmark ./PrimeService.Benchmarks/bin/Release/netstandard2.0/PrimeService.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
+
+To change the artifact folder:
+
+    $ dotnet benchmark ./PrimeService.Benchmarks/bin/Release/netstandard2.0/PrimeService.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono --artifacts="./path-to-artifact-folder/"
+
+To actually build the plots:
+    $ RScript .\BenchmarkDotNet.Artifacts\results\BuildPlots.R
+
+But only if you have a Perl interpreter.
