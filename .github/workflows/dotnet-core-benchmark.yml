@@ -26,7 +26,7 @@ jobs:
     - name: Run Tests
       run: dotnet test --no-restore --verbosity minimal
     - name: Run benchmarks
-      run: dotnet dotnet-benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1
+      run: dotnet dotnet-benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter '*' --runtimes net472 netcoreapp3.1
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
