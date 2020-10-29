@@ -1,5 +1,7 @@
 # Primes
 
+![.NET Core Unit Tests](https://github.com/NetzwergX/Primes/workflows/.NET%20Core%20Unit%20Tests/badge.svg)
+
 is a tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
 for a REST API which is consumed by an SPA app (using Aurelia) with
 
