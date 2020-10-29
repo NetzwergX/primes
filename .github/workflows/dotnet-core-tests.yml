@@ -1,8 +1,8 @@
-name: .NET Core
+name: .NET Core Unit Tests
 
 on:
   push:
-    branches: [ master, development, release-* ]
+    branches: [ master, development, release-*, feature-* ]
   pull_request:
     branches: [ master, release-* ]
 
@@ -22,4 +22,4 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity minimal
