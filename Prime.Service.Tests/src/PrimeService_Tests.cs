@@ -22,11 +22,11 @@ namespace Prime.Tests.Unit.Services
 
     public class PrimeService_IsPrime
     {
-        private readonly PrimeCalculatorService _service;
+        private readonly PrimeService _service;
 
         public PrimeService_IsPrime()
         {
-            _service = new PrimeCalculatorService();
+            _service = new PrimeCalculator();
         }
 
         [Theory (DisplayName="No primes smaller 2 ")]
@@ -75,11 +75,11 @@ namespace Prime.Tests.Unit.Services
     {
 
 
-        private readonly PrimeCalculatorService _service;
+        private readonly PrimeService _service;
 
         public PrimeService_NextPrime()
         {
-            _service = new PrimeCalculatorService();
+            _service = new PrimeCalculator();
         }
 
         [Theory (DisplayName = "Next prime for all numbers < 2 is 2 ")]
@@ -140,15 +140,15 @@ namespace Prime.Tests.Unit.Services
 
     public class PrimeService_GetPrimes
     {
-        private readonly PrimeCalculatorService _service;
+        private readonly PrimeService _service;
 
         public PrimeService_GetPrimes()
         {
-            _service = new PrimeCalculatorService();
+            _service = new PrimeCalculator();
         }
 
         [Fact (DisplayName = "Valid first 58 primes (Sequence OIESA000040) ")]
-        public void GetPrimes_First_10 () {
+        public void GetPrimes_First_58 () {
             var primes = _service.GetPrimes().Take(OIESA000040.primes.Length).ToArray();
 
             for (int i = 0; i < OIESA000040.primes.Length; i++)

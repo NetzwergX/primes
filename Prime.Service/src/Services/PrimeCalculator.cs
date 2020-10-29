@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Prime.Services
 {
-    public class PrimeCalculatorService : PrimeService {
+    public class PrimeCalculator : PrimeService {
         public bool IsPrime (int number)
         {
             if (number <= 1) return false;

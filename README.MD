@@ -24,13 +24,8 @@ In order to use `dotnet benchmark`,
 you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
 
     $ dotnet build -C Release
-    $ dotnet benchmark ./PrimeService.Benchmarks/bin/Release/netstandard2.0/PrimeService.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
+    $ dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
 
 To change the artifact folder:
 
-    $ dotnet benchmark ./PrimeService.Benchmarks/bin/Release/netstandard2.0/PrimeService.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono --artifacts="./path-to-artifact-folder/"
-
-To actually build the plots:
-    $ RScript .\BenchmarkDotNet.Artifacts\results\BuildPlots.R
-
-But only if you have a Perl interpreter.
+    $ dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono --artifacts="./path-to-artifact-folder/"

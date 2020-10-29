@@ -9,7 +9,7 @@ namespace Prime.Services.Benchmarks
     public class PrimeService_GetPrimes
     {
         private const int N = 10000;
-        private readonly PrimeService service = new PrimeCalculatorService();
+        private readonly PrimeService service = new PrimeCalculator();
         private readonly Consumer consumer = new Consumer();
 
         [Params(100, 200, 500, 1000)]
