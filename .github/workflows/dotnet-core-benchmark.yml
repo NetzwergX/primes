@@ -1,0 +1,33 @@
+name: .NET Core Unit Tests
+
+on:
+  push:
+    branches: [ release-*, benchmark-*]
+  pull_request:
+    branches: [ release-*, benchmark-*]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+#    - name: Setup .NET Core
+#      uses: actions/setup-dotnet@v1
+#      with:
+#        dotnet-version: 3.1.301
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build Solution
+      run: dotnet build --configuration Release --no-restore
+    - name: Run Tests
+      run: dotnet test --no-restore --verbosity minimal
+    - name: Run benchmarks
+      run: dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        name: Report
+        path:  /home/runner/work/Primes/Primes/BenchmarkDotNet.Artifacts/
