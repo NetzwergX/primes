@@ -18,8 +18,9 @@ jobs:
 #      with:
 #        dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore
-      run: dotnet tool restore
+      run: |
+        dotnet restore
+        dotnet tool restore
     - name: Build Solution
       run: dotnet build --configuration Release --no-restore
     - name: Run Tests
