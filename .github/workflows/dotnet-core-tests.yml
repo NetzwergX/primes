@@ -27,4 +27,4 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         name: Prime.WebApi
-        path: /home/runner/work/Prime/Prime.WebApi/bin/Release/netcoreapp3.1
+        path:  /home/runner/work/Primes/Primes/Prime.WebApi/bin/Release/netcoreapp3.1/
