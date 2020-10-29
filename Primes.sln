@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeService", "PrimeService\PrimeService.csproj", "{FBD75FF4-F8A8-4AF3-B780-B228500B9BBB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeService", "Prime.Service\Prime.Service.csproj", "{FBD75FF4-F8A8-4AF3-B780-B228500B9BBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeService.Tests", "PrimeService.Tests\PrimeService.Tests.csproj", "{2F8B7327-D283-4B06-85E4-F512FD7E92A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Service.Tests", "Prime.Service.Tests\Prime.Service.Tests.csproj", "{2F8B7327-D283-4B06-85E4-F512FD7E92A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimeService.Benchmarks", "PrimeService.Benchmarks\PrimeService.Benchmarks.csproj", "{A695913B-00CB-43DE-96C5-E2619698CE47}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Service.Benchmarks", "Prime.Service.Benchmarks\Prime.Service.Benchmarks.csproj", "{A695913B-00CB-43DE-96C5-E2619698CE47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
