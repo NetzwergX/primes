@@ -40,7 +40,9 @@ const sassRules = [
 ];
 
 module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, host } = {}) => ({
-  resolve: {
+  
+    bail: true,
+    resolve: {
     extensions: ['.ts', '.js'],
     modules: [srcDir, 'node_modules'],
 
@@ -60,7 +62,8 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
       // Uncomment next line if you need to support IE11
       // 'promise-polyfill/src/polyfill',
       'aurelia-bootstrapper'
-    ]
+    ],
+    vendor: ['jquery', 'bootstrap']
   },
   mode: production ? 'production' : 'development',
   output: {
@@ -268,7 +271,7 @@ module.exports = ({ production } = {}, {extractCss, analyze, tests, hmr, port, h
       'jQuery': 'jquery',
       '$': 'jquery',
       'window.jQuery': 'jquery',
-      'window.$': 'jquery'
+      'window.$': 'jquery',      
     }),
     new ModuleDependenciesPlugin({
       'aurelia-testing': ['./compile-spy', './view-spy']
