@@ -16,8 +16,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./Prime.UI
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -40,10 +38,11 @@ jobs:
         run: |
           npm install --silent
           npm run build
+        working-directory: ./Prime.UI
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.1.4
         with:
           # Artifact name
           name: Prime.UI
           # A file, directory or wildcard pattern that describes what to upload
-          path: ./dist
+          path: ./Prime.UI/dist
