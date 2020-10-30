@@ -48,7 +48,7 @@
     "expose-loader": "^1.0.0",
     "style-loader": "^2.0.0",
     "url-loader": "^4.1.0",
-    "css-loader": "^4.3.0",
+    "css-loader": "^5.0.0",
     "file-loader": "^6.1.0",
     "app-settings-loader": "^1.0.6",
     "json-loader": "^0.5.7",
