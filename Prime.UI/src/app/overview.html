@@ -1,42 +1,90 @@
 <template>
     <div class="pb-2 mt-4 mb-2">
         <h1>Prime.UI</h1>
-  </div>
+    </div>
 
     <div class="row">
-        <div class="col-4">
+        <div class="col-6">
             <div class="card text-left">
                 <img class="card-img-top" alt="">
                 <div class="card-body">
                     <h4 class="card-title">Check Prime Number</h4>
                     <p class="card-text">Input a number and it is automatically
                         checked for being a <i>prime number</i>!
+
+
+                    <form class="needs-validation" novalidate onsubmit="return false">
+                        <div class="form-group">
+                            <label for="candidate">Your candidate</label>
+                            <input type="text"
+                                class="form-control ${checked ? (valid ? 'is-valid' : 'is-invalid') : ''}"
+                                id="candidate" value.bind="candidate" aria-describedby="candidateHelp"
+                                placeholder="Enter prime number">
+                            <small id="candidateHelp" class="form-text text-muted">${message}</small>
+                        </div>
+                    </form>
+
+
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-6">
             <div class="card text-left">
                 <img class="card-img-top" alt="">
                 <div class="card-body">
                     <h4 class="card-title">Next Prime Number</h4>
-                    <p class="card-text text-justify">Input a number, and the next larger
-                        prime number is automatically shown!
+                    <p class="card-text text-justify">
+
+
+                    <form class="needs-validation" novalidate onsubmit="return false">
+                        <div class="form-group">
+                            <label for="bias">Type a number, and the next larger
+                                prime number is automatically shown!</label>
+                            <input type="text"
+                                class="form-control ${checked ? (valid ? 'is-valid' : 'is-invalid') : ''}" id="bias"
+                                value.bind="bias" aria-describedby="biasHelp" placeholder="Enter bias">
+                            <small id="biasHelp" class="form-text text-muted">${message2}</small>
+                        </div>
+                    </form>
+
+                    <input class="form-control" type="text" placeholder="Readonly input here…" readonly
+                        value.bind="next">
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-4">
+    </div>
+    <div class="row">
+        <div class="col-12 mt-4">
             <div class="card text-left">
                 <img class="card-img-top" alt="">
                 <div class="card-body">
                     <h4 class="card-title">Fetch Prime Numbers</h4>
-                    <p class="card-text text-justify">Input a number and the amount of numbers,
-                        and the next <code>N</code> prime numbers greater than the chosen number will
-                        be shown!
-                    </p>
+                    <div class="card-text text-justify">
+
+
+                        <form class="needs-validation" novalidate onsubmit="return false">
+
+                            <div class="form-group">
+                                <label for="count"> Type in a number, and we'll show you the requested amount of prime numbers!</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" value.bind="count" placeholder=""
+                                        aria-label="" aria-describedby="">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button"
+                                            click.trigger="fetchPrimes($event.target.value)">Fetch primes</button>
+                                    </div>
+                                </div>
+                                <small id="countHelp" class="form-text text-muted">${message3}</small>
+                            </div>
+                        </form>
+                        <ul class="list-inline">
+                            <li class="list-inline-item" repeat.for="prime of primes">${prime}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
