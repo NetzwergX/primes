@@ -10,3 +10,23 @@ updates:
     schedule:
       interval: "daily"
     target-branch: "development"
+  - package-ecosystem: "dotnet:nuget" # See documentation for possible values
+    directory: "/Prime.Service" # Location of package manifests
+    schedule:
+      interval: "daily"
+    target-branch: "development"
+  - package-ecosystem: "dotnet:nuget" # See documentation for possible values
+    directory: "/Prime.Service.Tests" # Location of package manifests
+    schedule:
+      interval: "daily"
+    target-branch: "development"
+  - package-ecosystem: "dotnet:nuget" # See documentation for possible values
+    directory: "/Prime.Service.Benchmarks" # Location of package manifests
+    schedule:
+      interval: "daily"
+    target-branch: "development"
+  - package-ecosystem: "dotnet:nuget" # See documentation for possible values
+    directory: "/Prime.WebApi" # Location of package manifests
+    schedule:
+      interval: "daily"
+    target-branch: "development"
