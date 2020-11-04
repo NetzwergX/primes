@@ -1,0 +1,46 @@
+image: dotnet/core/sdk:latest # mcr.microsoft.com/dotnet/core/sdk:latest
+
+stages:
+  - build
+  - test
+
+dotnet_build:
+  stage: build
+  only:
+    - branches
+  before_script:
+    - 'dotnet restore'
+  script:
+    - 'dotnet build --configuration Release --no-restore'  # build the project
+  artifacts:
+    paths:
+      - '/Prime.WebApi/bin/Release/netcoreapp3.1/'
+
+dotnet_test:
+  stage: test
+  only:
+    - branches
+  script:
+    - 'dotnet test --no-build --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults'  # running NUnit tests
+  artifacts:
+    when: always # even when it fails
+    paths:
+      - '.\TestResults'  # saving NUnit results to copy to deploy folder
+  dependencies:
+    - dotnet_build
+
+webpack_build:
+    image: node:latest
+    stage: build
+    only: 
+      - branches
+    before_script:
+        - 'cd .\Prime.UI\'
+    script:
+      - 'npm install --silent'
+      - 'npm run build'
+    after_script:
+      - 'cd ..'
+    artifacts:
+        paths:
+          - '.\Prime.UI\dist'
