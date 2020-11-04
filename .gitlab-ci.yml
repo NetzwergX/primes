@@ -1,4 +1,4 @@
-image: dotnet/core/sdk:latest # mcr.microsoft.com/dotnet/core/sdk:latest
+image: microsoft/dotnet:latest # mcr.microsoft.com/dotnet/core/sdk:latest
 
 stages:
   - build
@@ -35,7 +35,7 @@ webpack_build:
     only: 
       - branches
     before_script:
-        - 'cd .\Prime.UI\'
+        - 'cd ""./Prime.UI/""'
     script:
       - 'npm install --silent'
       - 'npm run build'
@@ -43,4 +43,4 @@ webpack_build:
       - 'cd ..'
     artifacts:
         paths:
-          - '.\Prime.UI\dist'
+          - './Prime.UI/dist'
