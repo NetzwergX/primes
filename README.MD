@@ -21,7 +21,7 @@ Copyright &copy; 2020 Sebastian Teumert &lt;https://sebastian.teumert.net&gt;
 
 [See LICENSE](/LICENSE)
 
-# Benchmarks
+# Benchmarks (for Prime.Service)
 
 In order to use `dotnet benchmark`,
 you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
@@ -35,3 +35,10 @@ To change the artifact folder:
 
 You can also run `dotnet tool restore`
 and then use `dotnet dotnet-benchmark ...`
+
+# Linting
+
+## Prime.UI
+
+Run `npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives`
+in `Prime.UI/`

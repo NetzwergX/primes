@@ -1,4 +1,4 @@
-name: .NET Core Benchmarks
+name: Benchmarks (.NET Core)
 
 on:
   push:
