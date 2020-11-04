@@ -16,11 +16,15 @@
     "tsconfigRootDir": "."
   },
   "rules": {
-    "no-unused-vars": 0,
-    "@typescript-eslint/no-unused-vars": 0,
-    "no-prototype-builtins": 0,
-    "no-console": 0,
-    "getter-return": 0
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "no-prototype-builtins": "error",
+    // we are in a browser, so console is ok-ish
+    // better use logger, though
+    "no-console": "warn",
+    "getter-return": "error",
+    // being explicit about types is *good*
+    "@typescript-eslint/no-inferrable-types": "off"
   },
   "env": {
     "es6": true,

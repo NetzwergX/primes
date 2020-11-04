@@ -6,12 +6,13 @@
 is a tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
 for a Web API which is consumed by an SPA app (using Aurelia) with
 
-* unit tests
-* integration tests
-* benchmarks (report generation)
+* Unit tests
+* Integration tests
+* Benchmarks (report generation, comment on PR [WIP])
+* Vulnerability scanning via CodeQL
 * [WIP] E2E tests
 * [WIP] Load tests
-* [WIP] stress tests
+* [WIP] Stress tests
 
 # License
 
@@ -42,3 +43,10 @@ and then use `dotnet dotnet-benchmark ...`
 
 Run `npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives`
 in `Prime.UI/`
+
+### VS Code
+
+If you are using the project in VS Code and open the root folder, ESLint will
+search the config files in the root folder. To properly run from `Prime.UI/`,
+add `"eslint.workingDirectories" : ["Prime.UI/"]` to your `settings.json`
+(for [Microsofts ESLint plugin](https://github.com/microsoft/vscode-eslint)).

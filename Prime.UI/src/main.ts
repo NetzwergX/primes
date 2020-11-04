@@ -1,4 +1,4 @@
-import { I18N } from 'aurelia-i18n';
+
 import 'bootstrap';
 import { Aurelia } from 'aurelia-framework';
 import * as environment from '../config/environment.json';

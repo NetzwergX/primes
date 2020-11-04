@@ -1,10 +1,5 @@
-//import { Router } from 'aurelia-router';
-//import { inject } from 'aurelia-dependency-injection';
+
 import { observable } from 'aurelia-framework';
-import {children} from 'aurelia-framework';
-import { unwatchFile } from 'fs';
-import { data } from 'jquery';
-//@inject()
 export class Overview {
 
     @observable candidate : number = 0;
