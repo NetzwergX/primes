@@ -14,7 +14,7 @@ dotnet_build:
     - 'dotnet build --configuration Release --no-restore'  # build the project
   artifacts:
     paths:
-      - '/Prime.WebApi/bin/Release/netcoreapp3.1/'
+      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
 
 dotnet_test:
   stage: test
