@@ -1,5 +1,9 @@
 image: mcr.microsoft.com/dotnet/core/sdk:latest
 
+variables:
+  NUGET_PACKAGES_DIRECTORY: '.nuget'
+  NPM_PACKAGES_DIRECTORY: 'Prime.UI/node_modules/'
+
 stages:
   - build
   - test
@@ -9,10 +13,11 @@ dotnet_build:
   only:
     - branches
   before_script:
-    - 'dotnet restore'
+    - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
   script:
     - 'dotnet build --configuration Release --no-restore'  # build the project
   artifacts:
+    name: prime-webapi-release
     paths:
       - './Prime.WebApi/bin/Release/netcoreapp3.1/'
 
@@ -42,5 +47,6 @@ webpack_build:
     after_script:
       - 'cd ..'
     artifacts:
+        name: prime-ui-release
         paths:
           - './Prime.UI/dist'
