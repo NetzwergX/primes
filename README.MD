@@ -14,6 +14,15 @@ for a Web API which is consumed by an SPA app (using Aurelia) with
 * [WIP] Load tests
 * [WIP] Stress tests
 
+
+# Usage
+
+    	$ dotnet build
+        $ dotnet watch run
+        $ cd .\Prime.UI\
+        $ npm install
+        $ npm start
+
 # License
 
 (The MIT License)
