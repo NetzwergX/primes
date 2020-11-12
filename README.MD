@@ -17,11 +17,11 @@ for a Web API which is consumed by an SPA app (using Aurelia) with
 
 # Usage
 
-    	$ dotnet build
-        $ dotnet watch run
-        $ cd .\Prime.UI\
-        $ npm install
-        $ npm start
+    $ dotnet build
+    $ dotnet watch run
+    $ cd .\Prime.UI\
+    $ npm install
+    $ npm start
 
 # License
 
