@@ -3,6 +3,10 @@ name: Benchmarks (.NET Core)
 on:
   push:
     branches: [ master, release-*, benchmark-*]
+    paths:
+    - '**.cs'
+    - '**.csproh'
+    - '**.sln'
   pull_request:
     branches: [ master, release-*, benchmark-*]
 
