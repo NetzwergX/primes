@@ -17,8 +17,13 @@ for a Web API which is consumed by an SPA app (using Aurelia) with
 
 # Usage
 
+    $ git clone git@github.com:NetzwergX/Primes.git
+    $ cd Primes/
+    
     $ dotnet build
+    $ cd Prime.WebApi/
     $ dotnet watch run
+    
     $ cd .\Prime.UI\
     $ npm install
     $ npm start
