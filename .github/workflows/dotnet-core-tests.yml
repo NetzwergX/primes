@@ -3,6 +3,10 @@ name:  Unit Tests (.NET Core)
 on:
   push:
     branches: [ master, development, release-*, feature-* ]
+    paths:
+    - '**.cs'
+    - '**.csproh'
+    - '**.sln'
   pull_request:
     branches: [ master, development, release-*, feature-* ]
 
