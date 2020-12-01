@@ -5,7 +5,7 @@ on:
     branches: [ master, development, release-*, feature-* ]
     paths:
     - '**.cs'
-    - '**.csproh'
+    - '**.csproj'
     - '**.sln'
   pull_request:
     branches: [ master, development, release-*, feature-* ]
