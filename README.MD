@@ -60,7 +60,9 @@ in `Prime.UI/`
 
 ### VS Code
 
-If you are using the project in VS Code and open the root folder, ESLint will
+~~If you are using the project in VS Code and open the root folder, ESLint will
 search the config files in the root folder. To properly run from `Prime.UI/`,
 add `"eslint.workingDirectories" : ["Prime.UI/"]` to your `settings.json`
-(for [Microsofts ESLint plugin](https://github.com/microsoft/vscode-eslint)).
+(for [Microsofts ESLint plugin](https://github.com/microsoft/vscode-eslint)).~~
+
+This repo contains a workspace `settings.json` with the proper ESLint configuration.
