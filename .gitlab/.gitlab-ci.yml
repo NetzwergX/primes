@@ -39,7 +39,8 @@ dotnet_test:
 dotnet_benchmark:
   stage: validate
   only:
-    ref: master
+    refs:
+      - master
   before_script:
     - dotnet restore
     - dotnet tool restore
