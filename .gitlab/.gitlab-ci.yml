@@ -5,6 +5,7 @@ variables:
   NPM_PACKAGES_DIRECTORY: 'Prime.UI/node_modules/'
 
 stages:
+  - lint
   - build
   - test
   - validate
@@ -55,7 +56,7 @@ dotnet_benchmark:
 
 eslint:
     image: node:latest
-    stage: build
+    stage: lint
     only: 
       - branches
     before_script:
