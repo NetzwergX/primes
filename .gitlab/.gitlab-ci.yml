@@ -7,6 +7,8 @@ variables:
 stages:
   - build
   - test
+  - validate
+  - integrate
 
 dotnet_build:
   stage: build
@@ -31,8 +33,41 @@ dotnet_test:
     when: always # even when it fails
     paths:
       - '.\TestResults'  # saving NUnit results to copy to deploy folder
-  dependencies:
+  needs:
     - dotnet_build
+
+dotnet_benchmark:
+  stage: validate
+  only:
+    ref: master
+  before_script:
+    - dotnet restore
+    - dotnet tool restore
+  script:
+    - dotnet dotnet-benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter '*' --runtimes net472 netcoreapp3.1
+  artifacts:
+    when: always # even when it fails
+    paths:
+      - '.\TestResults'  # saving NUnit results to copy to deploy folder
+  needs:
+    - dotnet_build
+
+eslint:
+    image: node:latest
+    stage: build
+    only: 
+      - branches
+    before_script:
+        - 'cd ""./Prime.UI/""'
+        - 'npm install --silent'
+    script:
+      - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
+    after_script:
+      - 'cd ..'
+    artifacts:
+        name: prime-ui-release
+        paths:
+          - './Prime.UI/dist'
 
 webpack_build:
     image: node:latest
@@ -41,8 +76,8 @@ webpack_build:
       - branches
     before_script:
         - 'cd ""./Prime.UI/""'
+        - 'npm install --silent'
     script:
-      - 'npm install --silent'
       - 'npm run build'
     after_script:
       - 'cd ..'
@@ -50,3 +85,17 @@ webpack_build:
         name: prime-ui-release
         paths:
           - './Prime.UI/dist'
+    needs:
+      - eslint
+
+e2e_test:
+  stage: integrate
+  script:
+    - echo ""Hello, World!""
+  needs:
+    - webpack_build
+    - dotnet_test
+    - dotnet_benchmark
+
+
+        
