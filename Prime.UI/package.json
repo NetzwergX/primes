@@ -22,7 +22,7 @@
     "whatwg-fetch": "^3.5.0"
   },
   "devDependencies": {
-    "@types/node": "^14.14.10",
+    "@types/node": "^14.14.11",
     "@types/webpack": "^4.41.25",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
