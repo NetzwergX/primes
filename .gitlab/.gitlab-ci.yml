@@ -39,6 +39,7 @@ dotnet_test:
 
 dotnet_benchmark:
   stage: validate
+  allow_failure: true
   only:
     refs:
       - master
