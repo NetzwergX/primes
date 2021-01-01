@@ -1,7 +1,7 @@
 # Primes
 ![.NET Core Unit Tests](https://github.com/NetzwergX/Primes/workflows/.NET%20Core%20Unit%20Tests/badge.svg) 
 ![Webpack Build](https://github.com/NetzwergX/Primes/workflows/Webpack%20Build/badge.svg) 
-![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)
+[![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
 
 is a tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
 for a Web API which is consumed by an SPA app (using Aurelia) with
