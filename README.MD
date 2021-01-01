@@ -1,6 +1,6 @@
 # Primes
-[![.NET Core Unit Tests](https://github.com/NetzwergX/Primes/workflows/.NET%20Core%20Unit%20Tests/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Unit+Tests+%28.NET+Core%29%22)
-[![Webpack Build](https://github.com/NetzwergX/Primes/workflows/Webpack%20Build/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Build+%28Webpack%29%22)
+[![Unit Tests (.NET Core)](https://github.com/NetzwergX/Primes/workflows/Unit%20Tests%20(.NET%20Core)/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Unit+Tests+%28.NET+Core%29%22) 
+[![Build (Webpack)](https://github.com/NetzwergX/Primes/workflows/Build%20(Webpack)/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Build+%28Webpack%29%22) 
 [![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
 
 A tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
