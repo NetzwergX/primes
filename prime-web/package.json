@@ -3,8 +3,8 @@
   "description": "An Aurelia client application.",
   "version": "0.1.0",
   "repository": {
-    "type": "???",
-    "url": "???"
+    "type": "git",
+    "url": "https://github.com/NetzwergX/Primes"
   },
   "license": "MIT",
   "dependencies": {
@@ -61,6 +61,7 @@
   "scripts": {
     "build": "webpack --env production",
     "start": "webpack serve",
+    "start:open": "webpack serve --host 0.0.0.0",
     "build:dev": "webpack",
     "analyze": "webpack --env production --analyze",
     "help": "webpack --help"
