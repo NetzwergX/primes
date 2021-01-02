@@ -4,7 +4,7 @@
 [![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
 
 A tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
-for a REST API (.Net Core) which is consumed by an SPA (using Aurelia),
+for a "REST" API (.Net Core) which is consumed by an SPA (using Aurelia),
 featuring:
 
 * Unit tests
@@ -16,6 +16,7 @@ featuring:
 * [WIP] Stress tests
 * Docker Image Build
 * [WIP] Docker image Upload to registry
+
 # Usage
 
     $ git clone git@github.com:NetzwergX/Primes.git
