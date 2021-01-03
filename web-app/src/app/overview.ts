@@ -17,7 +17,7 @@ export class Overview {
 
     fetchPrimes() : void {
         this.message3 = "Fetching...";
-        fetch(`http://localhost:8080/api/prime/fetch?after=${this.primes[this.primes.length-1] ?? 0}&limit=${this.count}`)
+        fetch(`/api/prime/fetch?after=${this.primes[this.primes.length-1] ?? 0}&limit=${this.count}`)
             .then(response => response.json())
             .then(data =>  this.primes = this.primes.concat(data))
             .then(() => this.message3 = "Done");
@@ -26,7 +26,7 @@ export class Overview {
     biasChanged() : void {
         console.log("Bias changed ", this.bias);
         this.message2 = "Checking...";
-        fetch(`http://localhost:8080/api/prime/next/${this.bias}`)
+        fetch(`/api/prime/next/${this.bias}`)
             .then(response => response.json())
             .then(data => this.next = data)
             .then(() => this.message2 = "Done");
@@ -38,7 +38,7 @@ export class Overview {
         this.valid = false;
         this.checked = false;
 
-        fetch(`http://localhost:8080/api/prime/check/${this.candidate}`)
+        fetch(`/api/prime/check/${this.candidate}`)
             .then(response => response.json())
             .then(data =>  this.valid = data)
             .then(() => this.checked = true)
