@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM alpine:3.12
 
 # Install packages
 RUN apk update && \
@@ -21,13 +21,17 @@ COPY config/* /etc/lighttpd/
 # copy files
 COPY htdocs/* /var/www/localhost/htdocs/
 
+RUN chown lighttpd:lighttpd /var/www/localhost/htdocs
+
+RUN mkdir -p /var/lib/lighttpd/cache/compress && chown lighttpd:lighttpd /var/lib/lighttpd/cache/compress
+
 # HEALTHCHECK --interval=1m --timeout=1s \
 #   CMD curl -f http://localhost/ || exit 1
 
 # Expose http(s) ports
 EXPOSE 80 443
 
-# VOLUME /var/www/localhost
+# VOLUME /var/www/localhost/htdocs
 # VOLUME /etc/lighttpd
 
 ENTRYPOINT ["/usr/sbin/lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
