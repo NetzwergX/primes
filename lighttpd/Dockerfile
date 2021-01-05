@@ -16,18 +16,18 @@ RUN mkdir /etc/lighttpd/ssl/ && \
 	chmod 400 /etc/lighttpd/ssl/localhost.pem
 
 # copy config
-# COPY etc/lighttpd/*.conf /etc/lighttpd/
+COPY config/* /etc/lighttpd/
 
 # copy files
-#RUN mkdir /var/www/html
-COPY htdocs/* /var/www/localhost/
-
-RUN mkdir -p /var/cache/lighttpd/uploads
+COPY htdocs/* /var/www/localhost/htdocs/
 
 # HEALTHCHECK --interval=1m --timeout=1s \
 #   CMD curl -f http://localhost/ || exit 1
 
 # Expose http(s) ports
 EXPOSE 80 443
+
+# VOLUME /var/www/localhost
+# VOLUME /etc/lighttpd
 
 ENTRYPOINT ["/usr/sbin/lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
