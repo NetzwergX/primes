@@ -3,4 +3,5 @@ WORKDIR /prime/web-app/
 COPY . .
 RUN npm install --production
 EXPOSE 8080
-CMD ["npm", "run", "start:open"]
+
+ENTRYPOINT ["npx", "webpack", "serve", "--env", "production"]

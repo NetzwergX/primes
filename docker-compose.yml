@@ -1,0 +1,22 @@
+version: "3.9"  # optional since v1.27.0
+
+networks:
+  primes-net:
+    driver: bridge
+
+services:
+  api:
+    build: rest-api/
+    # ports:
+    #   - "5000:5000"
+    networks:
+      - primes-net
+    command: --urls http://api:5000
+
+  web:
+    build: web-app/
+    ports:
+      - "8080:8080"
+    networks:
+      - primes-net
+    command: --host web --env proxyUrl=http://api:5000
