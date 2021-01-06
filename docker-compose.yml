@@ -5,6 +5,7 @@ networks:
     driver: bridge
 
 services:
+  # "REST" api with .Net Core 3.1
   api:
     build: rest-api/
     # ports:
@@ -13,10 +14,22 @@ services:
       - primes-net
     command: --urls http://api:5000
 
+  # web app served via lighty
   web:
-    build: web-app/
+    image: registry.gitlab.com/s.teumert/docker-lighttpd:1.0.0
     ports:
       - "8080:8080"
     networks:
       - primes-net
-    command: --host web --env proxyUrl=http://api:5000
+    volumes:
+      - "./web-app/dist:/var/www/localhost/htdocs/"
+      - "./lighttpd:/etc/lighttpd/"
+
+  # web app served via webpack
+#   web:
+#     build: web-app/
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - primes-net
+#     command: --host web --env proxyUrl=http://api:5000
