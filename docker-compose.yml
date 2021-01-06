@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 services:
-  # "REST" api with .Net Core 3.1
+  # "REST" api with .Net Core 3.1, build on container
   api:
     build: rest-api/
     # ports:
@@ -13,6 +13,10 @@ services:
     networks:
       - primes-net
     command: --urls http://api:5000
+    # volumes:
+    #   # timezone fix (doesn't wrok on windows)
+    #   - "/etc/timezone:/etc/timezone:ro"
+    #   - "/etc/localtime:/etc/localtime:ro"
 
   # web app served via lighty
   web:
@@ -21,11 +25,16 @@ services:
       - "8080:8080"
     networks:
       - primes-net
+    depends_on:
+      - "api" # make sure API is up so that proxy doesn't fail
     volumes:
       - "./web-app/dist:/var/www/localhost/htdocs/"
       - "./lighttpd:/etc/lighttpd/"
+      # timezone fix
+    #   - "/etc/timezone:/etc/timezone:ro"
+    #   - "/etc/localtime:/etc/localtime:ro"
 
-  # web app served via webpack
+#   # web app served via webpack
 #   web:
 #     build: web-app/
 #     ports:
@@ -33,3 +42,5 @@ services:
 #     networks:
 #       - primes-net
 #     command: --host web --env proxyUrl=http://api:5000
+#     depends_on:
+#      - "api" # make sure API is up so that proxy doesn't fail
