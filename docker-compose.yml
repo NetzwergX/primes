@@ -5,19 +5,6 @@ networks:
     driver: bridge
 
 services:
-  # "REST" api with .Net Core 3.1, build on container
-  api:
-    build: dotnet-web-api/Prime.WebApi/
-    # ports:
-    #   - "5000:5000"
-    networks:
-      - primes-net
-    command: --urls http://api:5000
-    # volumes:
-    #   # timezone fix (doesn't work on windows)
-    #   - "/etc/timezone:/etc/timezone:ro"
-    #   - "/etc/localtime:/etc/localtime:ro"
-
   # web app served via lighty
   web:
     image: polygnome/lighttpd
@@ -33,6 +20,32 @@ services:
       # timezone fix
     #   - "/etc/timezone:/etc/timezone:ro"
     #   - "/etc/localtime:/etc/localtime:ro"
+
+  # "REST" api with .Net Core 3.1, build on container
+  api:
+    image: polygnome/prime-api:quarkus-1.0.0-SNAPSHOT
+    # ports:
+    #   - "5000:5000"
+    networks:
+      - primes-net
+#    command: --urls http://api:5000
+    # volumes:
+    #   # timezone fix (doesn't work on windows)
+    #   - "/etc/timezone:/etc/timezone:ro"
+    #   - "/etc/localtime:/etc/localtime:ro"
+
+#   # "REST" api with .Net Core 3.1, build on container
+#   api:
+#     build: dotnet-web-api/Prime.WebApi/
+#     # ports:
+#     #   - "5000:5000"
+#     networks:
+#       - primes-net
+#     command: --urls http://api:5000
+#     # volumes:
+#     #   # timezone fix (doesn't work on windows)
+#     #   - "/etc/timezone:/etc/timezone:ro"
+#     #   - "/etc/localtime:/etc/localtime:ro"
 
 #   # "REST" api with .Net Core 3.1, build on container
 #   api:
