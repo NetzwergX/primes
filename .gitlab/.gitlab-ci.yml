@@ -1,104 +1,101 @@
-image: mcr.microsoft.com/dotnet/core/sdk:latest
+# image: mcr.microsoft.com/dotnet/core/sdk:latest
 
-variables:
-  NUGET_PACKAGES_DIRECTORY: '.nuget'
-  NPM_PACKAGES_DIRECTORY: 'Prime.UI/node_modules/'
+# variables:
+#   NUGET_PACKAGES_DIRECTORY: '.nuget'
+#   NPM_PACKAGES_DIRECTORY: 'Prime.UI/node_modules/'
 
-stages:
-  - lint
-  - build
-  - test
-  - validate
-  - integrate
+# stages:
+#   - lint
+#   - build
+#   - test
+#   - validate
+#   - integrate
 
-dotnet_build:
-  stage: build
-  only:
-    - branches
-  before_script:
-    - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
-  script:
-    - 'dotnet build --configuration Release --no-restore'  # build the project
-  artifacts:
-    name: prime-webapi-release
-    paths:
-      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
+# dotnet_build:
+#   stage: build
+#   only:
+#     - branches
+#   before_script:
+#     - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
+#   script:
+#     - 'dotnet build --configuration Release --no-restore'  # build the project
+#   artifacts:
+#     name: prime-webapi-release
+#     paths:
+#       - './Prime.WebApi/bin/Release/netcoreapp3.1/'
 
-dotnet_test:
-  stage: test
-  only:
-    - branches
-  script:
-    - 'dotnet test --no-build --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults'  # running NUnit tests
-  artifacts:
-    when: always # even when it fails
-    paths:
-      - '.\TestResults'  # saving NUnit results to copy to deploy folder
-  needs:
-    - dotnet_build
+# dotnet_test:
+#   stage: test
+#   only:
+#     - branches
+#   script:
+#     - 'dotnet test --no-build --no-restore --collect:"XPlat Code Coverage" --results-directory ./TestResults'  # running NUnit tests
+#   artifacts:
+#     when: always # even when it fails
+#     paths:
+#       - '.\TestResults'  # saving NUnit results to copy to deploy folder
+#   needs:
+#     - dotnet_build
 
-dotnet_benchmark:
-  stage: validate
-  allow_failure: true
-  only:
-    refs:
-      - master
-  before_script:
-    - dotnet restore
-    - dotnet tool restore
-  script:
-    - dotnet dotnet-benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter '*' --runtimes net472 netcoreapp3.1
-  artifacts:
-    when: always # even when it fails
-    paths:
-      - '.\TestResults'  # saving NUnit results to copy to deploy folder
-  needs:
-    - dotnet_build
+# dotnet_benchmark:
+#   stage: validate
+#   allow_failure: true
+#   only:
+#     refs:
+#       - master
+#   before_script:
+#     - dotnet restore
+#     - dotnet tool restore
+#   script:
+#     - dotnet dotnet-benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter '*' --runtimes net472 netcoreapp3.1
+#   artifacts:
+#     when: always # even when it fails
+#     paths:
+#       - '.\TestResults'  # saving NUnit results to copy to deploy folder
+#   needs:
+#     - dotnet_build
 
-eslint:
-    image: node:latest
-    stage: lint
-    only: 
-      - branches
-    before_script:
-        - 'cd ""./Prime.UI/""'
-        - 'npm install --silent'
-    script:
-      - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
-    after_script:
-      - 'cd ..'
-    artifacts:
-        name: prime-ui-release
-        paths:
-          - './Prime.UI/dist'
+# eslint:
+#     image: node:latest
+#     stage: lint
+#     only:
+#       - branches
+#     before_script:
+#         - 'cd ""./Prime.UI/""'
+#         - 'npm install --silent'
+#     script:
+#       - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
+#     after_script:
+#       - 'cd ..'
+#     artifacts:
+#         name: prime-ui-release
+#         paths:
+#           - './Prime.UI/dist'
 
-webpack_build:
-    image: node:latest
-    stage: build
-    only: 
-      - branches
-    before_script:
-        - 'cd ""./Prime.UI/""'
-        - 'npm install --silent'
-    script:
-      - 'npm run build'
-    after_script:
-      - 'cd ..'
-    artifacts:
-        name: prime-ui-release
-        paths:
-          - './Prime.UI/dist'
-    needs:
-      - eslint
+# webpack_build:
+#     image: node:latest
+#     stage: build
+#     only:
+#       - branches
+#     before_script:
+#         - 'cd ""./Prime.UI/""'
+#         - 'npm install --silent'
+#     script:
+#       - 'npm run build'
+#     after_script:
+#       - 'cd ..'
+#     artifacts:
+#         name: prime-ui-release
+#         paths:
+#           - './Prime.UI/dist'
+#     needs:
+#       - eslint
 
-e2e_test:
-  stage: integrate
-  script:
-    - echo ""Hello, World!""
-  needs:
-    - webpack_build
-    - dotnet_test
-    - dotnet_benchmark
-
-
-        
+# e2e_test:
+#   stage: integrate
+#   script:
+#     - echo ""Hello, World!""
+#   needs:
+#     - webpack_build
+#     - dotnet_test
+#     - dotnet_benchmark
