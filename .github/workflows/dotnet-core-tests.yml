@@ -2,17 +2,11 @@ name:  Unit Tests (.NET Core)
 
 on:
   push:
-    branches: [ master, development, release-*, feature-* ]
     paths:
-    - '**.cs'
-    - '**.csproj'
-    - '**.sln'
-  pull_request:
-    branches: [ master, development, release-*, feature-* ]
-
+    - 'dotnet-web-api/**'
+    - '.github/**' # run if CI/CD config changes
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -23,12 +17,15 @@ jobs:
 #        dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore
+      working-directory: ./aurelia-spa/
     - name: Build Solution
       run: dotnet build --configuration Release --no-restore
+      working-directory: ./aurelia-spa/
     - name: Run Tests
       run: dotnet test --no-restore --verbosity minimal
+      working-directory: ./aurelia-spa/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
-        name: Prime.WebApi
-        path:  /home/runner/work/Primes/Primes/Prime.WebApi/bin/Release/netcoreapp3.1/
+        name: dotnet-web-api
+        path:  dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/
