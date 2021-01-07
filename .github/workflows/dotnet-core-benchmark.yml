@@ -4,9 +4,8 @@ on:
   push:
     branches: [ master, release-*, benchmark-*]
     paths:
-    - '**.cs'
-    - '**.csproj'
-    - '**.sln'
+    - 'dotnet-web-api/**'
+    - '.github/**'
   pull_request:
     branches: [ master, release-*, benchmark-*]
 
