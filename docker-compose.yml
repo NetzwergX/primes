@@ -7,20 +7,20 @@ networks:
 services:
   # "REST" api with .Net Core 3.1, build on container
   api:
-    build: rest-api/
+    build: dotnet-web-api/Prime.WebApi/
     # ports:
     #   - "5000:5000"
     networks:
       - primes-net
     command: --urls http://api:5000
     # volumes:
-    #   # timezone fix (doesn't wrok on windows)
+    #   # timezone fix (doesn't work on windows)
     #   - "/etc/timezone:/etc/timezone:ro"
     #   - "/etc/localtime:/etc/localtime:ro"
 
   # web app served via lighty
   web:
-    image: registry.gitlab.com/s.teumert/docker-lighttpd:1.0.0
+    image: polygnome/lighttpd
     ports:
       - "8080:8080"
     networks:
@@ -28,15 +28,28 @@ services:
     depends_on:
       - "api" # make sure API is up so that proxy doesn't fail
     volumes:
-      - "./web-app/dist:/var/www/localhost/htdocs/"
+      - "./aurelia-spa/dist:/var/www/localhost/htdocs/"
       - "./lighttpd:/etc/lighttpd/"
       # timezone fix
     #   - "/etc/timezone:/etc/timezone:ro"
     #   - "/etc/localtime:/etc/localtime:ro"
 
+#   # "REST" api with .Net Core 3.1, build on container
+#   api:
+#     build: dotnet-rest-api/
+#     # ports:
+#     #   - "5000:5000"
+#     networks:
+#       - primes-net
+#     command: --urls http://api:5000
+#     # volumes:
+#     #   # timezone fix (doesn't wrok on windows)
+#     #   - "/etc/timezone:/etc/timezone:ro"
+#     #   - "/etc/localtime:/etc/localtime:ro"
+
 #   # web app served via webpack
 #   web:
-#     build: web-app/
+#     build: aurelia-spa/
 #     ports:
 #       - "8080:8080"
 #     networks:
