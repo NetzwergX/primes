@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencie
         run: |
           npm install --silent
-        working-directory: ./Prime.UI
+        working-directory: ./aurelia-spa/
       - name: Run ESLint
         run: |
           npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives
-        working-directory: ./Prime.UI
+        working-directory: ./aurelia-spa/
