@@ -4,7 +4,7 @@
 [![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
 
 A tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
-for a "REST" API (.Net Core) which is consumed by an SPA (using Aurelia),
+for a Web HTTP(S) API which is consumed by an SPA (using Aurelia),
 featuring:
 
 * Unit tests
@@ -15,37 +15,25 @@ featuring:
 * [WIP] Load tests
 * [WIP] Stress tests
 * Docker Image Build
-* [WIP] Docker image Upload to registry
+* [WIP] Docker image upload to registry
+
+The Web API is provided either as .Net Core 3.1 project
+or as native build with Quarkus + GraalVM.
 
 # Usage
 
     $ git clone git@github.com:NetzwergX/Primes.git
     $ cd Primes/
 
-    % pushd rest-api
-    $ dotnet build
-    $ dotnet run -p Prime.WebApi/
+    $ pushd dotnet-rest-api/
+    $ dotnet publish -c Release
     $ popd
 
-    $ pushd web-app/
+    $ pushd aurelia-spa/
     $ npm install
-    $ npm start
     $ popd
 
-# Docker build
-
-    $ git clone git@github.com:NetzwergX/Primes.git
-    $ cd Primes/
-
-    % pushd rest-api
-    $ docker build -t rest-api .
-    $ docker run -dp 5000:5000 rest-api
-    $ popd
-
-    % pushd web-app
-    $ docker build -t web-app .
-    $ docker run -dp 8080:8080 web-app
-    $ popd
+    $ docker-compose up
 
 # License
 
@@ -55,7 +43,9 @@ Copyright &copy; 2020 Sebastian Teumert &lt;https://sebastian.teumert.net&gt;
 
 [See LICENSE](/LICENSE)
 
-# Benchmarks (for Prime.Service)
+# .Net Core Web API
+
+## Benchmarks (for Prime.Service)
 
 In order to use `dotnet benchmark`,
 you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
@@ -74,14 +64,14 @@ To change the artifact folder:
 You can also run `dotnet tool restore`
 and then use `dotnet dotnet-benchmark ...`
 
-# Linting
+## Linting
 
-## Prime.UI
+### Prime.UI
 
 Run `npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives`
 in `Prime.UI/`
 
-### VS Code
+#### VS Code
 
 ~~If you are using the project in VS Code and open the root folder, ESLint will
 search the config files in the root folder. To properly run from `Prime.UI/`,
