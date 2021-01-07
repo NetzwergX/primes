@@ -17,15 +17,15 @@ jobs:
 #        dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore
-      working-directory: ./aurelia-spa/
+      working-directory: ./dotnet-web-api/
     - name: Build Solution
       run: dotnet build --configuration Release --no-restore
-      working-directory: ./aurelia-spa/
+      working-directory: ./dotnet-web-api/
     - name: Run Tests
       run: dotnet test --no-restore --verbosity minimal
-      working-directory: ./aurelia-spa/
+      working-directory: ./dotnet-web-api/
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
         name: dotnet-web-api
-        path:  dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/
+        path:  ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/
