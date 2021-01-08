@@ -1,0 +1,146 @@
+variables:
+  NUGET_PACKAGES_DIRECTORY: 'dotnet-web-api/.nuget'
+  NPM_PACKAGES_DIRECTORY: 'aurelia-spa/node_modules/'
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+
+stages:
+  - lint
+  - build
+  - test
+  - dockerize
+  - release
+
+Build DotNet Core Web Api:
+  stage: build
+  image: mcr.microsoft.com/dotnet/core/sdk:latest
+  before_script:
+    - cd dotnet-web-api/
+    - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
+  script:
+    - 'dotnet build --configuration Release --no-restore'  # build the project
+  artifacts:
+    name: prime-api-dotnet
+    paths:
+      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
+
+Test DotNet Core Web Api:
+  stage: test
+  image: mcr.microsoft.com/dotnet/core/sdk:latest
+  before_script:
+    - cd dotnet-web-api/
+    - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
+  script:
+    - 'dotnet build --configuration Release --no-restore'  # build the project
+  artifacts:
+    name: prime-api-dotnet
+    paths:
+      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
+  needs: ['Build DotNet Core Web Api']
+
+Dockerize DotNet Core:
+  # Official docker image.
+  image: docker:latest
+  stage: dockerize
+  services:
+    - docker:dind
+  before_script:
+    - cd dotnet-web-api/
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA"  .
+    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
+  needs: ['Build DotNet Core Web Api']
+
+# TODO for merge-requests, set tag merge-<id>
+# TODO for main, set :latest
+
+Build Quarkus Web Api:
+  stage: build
+  image: oracle/graalvm-ce:20.3.0-java11
+  before_script:
+    - cd quarkus-api/
+  script:
+    - /mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPS
+  artifacts:
+    name: prime-api-quarkus
+    paths:
+      - 'quarkus-api/target/*.jar'
+      - 'quarkus-api/**/*.jar'
+
+Dockerize Quarkus Web Api:
+  # Official docker image.
+  image: docker:latest
+  stage: dockerize
+  services:
+    - docker:dind
+  before_script:
+    - cd quarkus-api/
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+  script:
+    - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
+    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
+# TODO for merge-requests, set tag merge-<id>
+# TODO for main, set :latest
+
+Lint Aurelia SPA:
+  stage: lint
+  image: node:12-alpine
+  before_script:
+    - cd aurelia-spa/
+  script:
+    - npm install --quiet
+    - npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives
+
+Build Aurelia SPA:
+  stage: build
+  image: node:12-alpine
+  before_script:
+    - cd aurelia-spa/
+  script:
+    - npm install --quiet
+    - npm run build
+  artifacts:
+    name: prime-spa
+    paths:
+      - './aurelia-spa/dist'
+
+Dockerize Aurelia:
+  # Official docker image.
+  image: docker:latest
+  stage: dockerize
+  services:
+    - docker:dind
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+  script:
+    - cp ./dist/* ../lighttpd/htdocs/
+    - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
+    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
+  needs: ['Build Aurelia SPA']
+
+Release:
+  # Official docker image.
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: release
+  script:
+    - echo "Creating release"
+  needs: ['Build Aurelia SPA', 'Build Quarkus Web Api', 'Build DotNet Core Web Api']
+  only:
+    - tags
+  release:
+    name: '$CI_COMMIT_TAG'
+    description:  'Release v$CI_COMMIT_TAG'
+    tag_name: $CI_COMMIT_TAG
+    ref: '$CI_COMMIT_TAG'
+
+# TODO release: add links
+# TODO release: add changelog
+#   cf. https://stackoverflow.com/questions/30805098/how-to-display-last-n-tags-in-git
+# TODO Except/Only, branches, main
