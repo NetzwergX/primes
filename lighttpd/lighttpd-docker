@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# create a special pipe since lighttpd can not access /dev/stderr in docker
+
+mkfifo -m 600 /tmp/lighttpd_log
+cat <> /tmp/lighttpd_log 1>&2 &
+chown lighttpd /tmp/lighttpd_log
+
+# start lighttpd, pass entrypoint args
+/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf "$@" 2>&1

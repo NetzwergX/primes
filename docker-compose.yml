@@ -5,68 +5,21 @@ networks:
     driver: bridge
 
 services:
-  # web app served via lighty
+  # Web App served via lighttpd
   web:
-    image: polygnome/lighttpd
+    build: lighttpd/
     ports:
       - "8080:8080"
     networks:
       - primes-net
     depends_on:
       - "api" # make sure API is up so that proxy doesn't fail
-    volumes:
-      - "./aurelia-spa/dist:/var/www/localhost/htdocs/"
-      - "./lighttpd:/etc/lighttpd/"
-      # timezone fix
-    #   - "/etc/timezone:/etc/timezone:ro"
-    #   - "/etc/localtime:/etc/localtime:ro"
 
-  # "REST" api with .Net Core 3.1, build on container
+  # Web API served via Quarkus
   api:
-    image: polygnome/prime-api:quarkus-1.0.0-SNAPSHOT
-    # ports:
-    #   - "5000:5000"
+    #image: primes/prime-api/quarkus:latest
+    build:
+      context: ./quarkus-api/
+      dockerfile: ./src/main/docker/Dockerfile.jvm
     networks:
       - primes-net
-#    command: --urls http://api:5000
-    # volumes:
-    #   # timezone fix (doesn't work on windows)
-    #   - "/etc/timezone:/etc/timezone:ro"
-    #   - "/etc/localtime:/etc/localtime:ro"
-
-#   # "REST" api with .Net Core 3.1, build on container
-#   api:
-#     build: dotnet-web-api/Prime.WebApi/
-#     # ports:
-#     #   - "5000:5000"
-#     networks:
-#       - primes-net
-#     command: --urls http://api:5000
-#     # volumes:
-#     #   # timezone fix (doesn't work on windows)
-#     #   - "/etc/timezone:/etc/timezone:ro"
-#     #   - "/etc/localtime:/etc/localtime:ro"
-
-#   # "REST" api with .Net Core 3.1, build on container
-#   api:
-#     build: dotnet-rest-api/
-#     # ports:
-#     #   - "5000:5000"
-#     networks:
-#       - primes-net
-#     command: --urls http://api:5000
-#     # volumes:
-#     #   # timezone fix (doesn't wrok on windows)
-#     #   - "/etc/timezone:/etc/timezone:ro"
-#     #   - "/etc/localtime:/etc/localtime:ro"
-
-#   # web app served via webpack
-#   web:
-#     build: aurelia-spa/
-#     ports:
-#       - "8080:8080"
-#     networks:
-#       - primes-net
-#     command: --host web --env proxyUrl=http://api:5000
-#     depends_on:
-#      - "api" # make sure API is up so that proxy doesn't fail
