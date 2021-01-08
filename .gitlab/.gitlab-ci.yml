@@ -5,7 +5,6 @@ variables:
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
 stages:
-  - lint
   - build
   - test
   - dockerize
@@ -85,13 +84,14 @@ Dockerize Quarkus Web Api:
 # TODO for main, set :latest
 
 Lint Aurelia SPA:
-  stage: lint
+  stage: build
   image: node:12-alpine
   before_script:
     - cd aurelia-spa/
   script:
     - npm install --quiet
     - npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives
+  allow_failure: true
 
 Build Aurelia SPA:
   stage: build
