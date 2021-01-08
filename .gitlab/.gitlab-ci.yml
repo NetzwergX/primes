@@ -64,7 +64,7 @@ Build Quarkus Web Api:
     name: prime-api-quarkus
     paths:
       - 'quarkus-api/target/*.jar'
-      - 'quarkus-api/**/*.jar'
+      - 'quarkus-api/target/**/*.jar'
 
 Dockerize Quarkus Web Api:
   # Official docker image.
