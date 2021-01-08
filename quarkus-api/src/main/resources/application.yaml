@@ -1,0 +1,19 @@
+quarkus:
+  banner:
+    enabled: false
+  http:
+    port: 5000
+  container-image:
+    image: ${CI_REGISTRY_IMAGE:primes}/prime-api/quarkus
+    additional-tags:
+      - latest
+      - ${CI_COMMIT_TAG:latest}
+      - ${CI_COMMIT_HASH:latest}
+      - ${quarkus.application.version}
+#   package:
+#     type: uber-jar
+
+# %dev:
+#     quarkus:
+#         http:
+#             port: 5000

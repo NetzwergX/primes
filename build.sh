@@ -1,4 +1,4 @@
-#!powershell
+#!/bin/sh
 
 echo "Building frontend (Aurelia SPA) ..."
 pushd aurelia-spa
@@ -18,4 +18,4 @@ pushd dotnet-web-api/
 dotnet publish -c Release
 popd
 
-docker-compose up $args
+docker-compose up "$@"
