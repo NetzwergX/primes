@@ -22,7 +22,7 @@ Build DotNet Core Web Api:
   artifacts:
     name: prime-api-dotnet
     paths:
-      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
+      - './dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/'
 
 Test DotNet Core Web Api:
   stage: test
@@ -32,10 +32,6 @@ Test DotNet Core Web Api:
     - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
   script:
     - 'dotnet build --configuration Release --no-restore'  # build the project
-  artifacts:
-    name: prime-api-dotnet
-    paths:
-      - './Prime.WebApi/bin/Release/netcoreapp3.1/'
   needs: ['Build DotNet Core Web Api']
 
 Dockerize DotNet Core:
@@ -49,7 +45,7 @@ Dockerize DotNet Core:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA"  .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
   needs: ['Build DotNet Core Web Api']
@@ -63,6 +59,7 @@ Build Quarkus Web Api:
   before_script:
     - cd quarkus-api/
   script:
+    - chmod +x ./mvnw
     - ./mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPS
   artifacts:
     name: prime-api-quarkus
@@ -118,11 +115,11 @@ Dockerize Aurelia:
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - cp ./dist/* ../lighttpd/htdocs/
-    - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
-    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
+    - cp ./aurelia-spa/dist/* ./lighttpd/htdocs/
+    - docker build -t "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA" lighttpd/
+    - docker tag  "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA"  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_SHORT_SHA"
+    - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME"
   needs: ['Build Aurelia SPA']
 
 Release:
