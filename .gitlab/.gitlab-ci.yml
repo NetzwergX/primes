@@ -46,7 +46,7 @@ Dockerize DotNet Core:
     - docker:dind
   before_script:
     - cd dotnet-web-api/
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA"  .
     - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
@@ -63,7 +63,7 @@ Build Quarkus Web Api:
   before_script:
     - cd quarkus-api/
   script:
-    - /mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPS
+    - ./mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPS
   artifacts:
     name: prime-api-quarkus
     paths:
@@ -78,7 +78,7 @@ Dockerize Quarkus Web Api:
     - docker:dind
   before_script:
     - cd quarkus-api/
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
     - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
@@ -116,7 +116,7 @@ Dockerize Aurelia:
   services:
     - docker:dind
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password--stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - cp ./dist/* ../lighttpd/htdocs/
     - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
