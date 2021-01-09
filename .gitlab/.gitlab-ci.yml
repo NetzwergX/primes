@@ -41,7 +41,7 @@ Dockerize DotNet Core Web Api:
   services:
     - docker:dind
   before_script:
-    - cd dotnet-web-api/
+    - cd dotnet-web-api/Primes.WebApi/
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"  .
