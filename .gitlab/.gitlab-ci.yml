@@ -80,7 +80,7 @@ Dockerize Quarkus Web Api:
     - cd quarkus-api/
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" .
+    - docker build -f ./src/main/docker/Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" .
     - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
