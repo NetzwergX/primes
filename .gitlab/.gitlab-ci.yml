@@ -143,7 +143,7 @@ Release:
 
 Deploy:
   stage: deploy
-  image: apline:3.12
+  image: alpine:3.12
   script:
     - echo "fake deploy script"
   environment:
