@@ -44,9 +44,9 @@ Dockerize DotNet Core:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA"  .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
+    #- docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
+    #- docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
   needs: ['Build DotNet Core Web Api']
 
 # TODO for merge-requests, set tag merge-<id>
@@ -65,6 +65,9 @@ Build Quarkus Web Api:
     paths:
       - 'quarkus-api/target/*.jar'
       - 'quarkus-api/target/**/*.jar'
+  cache:
+    paths:
+        - $CI_PROJECT_DIR/.m2/repository
 
 Dockerize Quarkus Web Api:
   # Official docker image.
@@ -77,9 +80,9 @@ Dockerize Quarkus Web Api:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
+    #- docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
+    #- docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
 # TODO for merge-requests, set tag merge-<id>
 # TODO for main, set :latest
 
@@ -117,9 +120,9 @@ Dockerize Aurelia:
   script:
     - cp ./aurelia-spa/dist/* ./lighttpd/htdocs/
     - docker build -t "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA" lighttpd/
-    - docker tag  "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA"  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME" # tag or branch name
+    #- docker tag  "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA"  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_SHORT_SHA"
-    - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME"
+    #- docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME"
   needs: ['Build Aurelia SPA']
 
 Release:
