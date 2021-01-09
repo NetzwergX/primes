@@ -34,7 +34,7 @@ Test DotNet Core Web Api:
     - 'dotnet build --configuration Release --no-restore'  # build the project
   needs: ['Build DotNet Core Web Api']
 
-Dockerize DotNet Core:
+Dockerize DotNet Core Web Api:
   # Official docker image.
   image: docker:latest
   stage: dockerize
@@ -153,6 +153,7 @@ Deploy:
   needs:
     - Dockerize Aurelia
     - Dockerize Quarkus Web Api
+    - Dockerize DotNet Core Web Api
 
 # TODO release: add links
 # TODO release: add changelog
