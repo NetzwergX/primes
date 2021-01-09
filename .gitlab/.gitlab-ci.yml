@@ -45,7 +45,7 @@ Dockerize DotNet Core:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"  .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
   needs: ['Build DotNet Core Web Api']
@@ -81,7 +81,7 @@ Dockerize Quarkus Web Api:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build -f .\src\main\docker\Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
 # TODO for merge-requests, set tag merge-<id>
@@ -121,7 +121,7 @@ Dockerize Aurelia:
   script:
     - cp ./aurelia-spa/dist/* ./lighttpd/htdocs/
     - docker build -t "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_SHORT_SHA" lighttpd/
-    - docker tag  "$CI_REGISTRY_IMAGE/web-app:CI_COMMIT_SHORT_SHA"  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker tag  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_SHORT_SHA"  "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME"
   needs: ['Build Aurelia SPA']
