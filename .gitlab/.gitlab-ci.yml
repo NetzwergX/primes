@@ -48,7 +48,9 @@ Dockerize DotNet Core Web Api:
     - docker tag  "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME" # tag or branch name
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_REF_NAME"
-  needs: ['Build DotNet Core Web Api']
+  needs:
+    - Build DotNet Core Web Api
+    - Test DotNet Core Web Api
 
 # TODO for merge-requests, set tag merge-<id>
 # TODO for main, set :latest
@@ -96,7 +98,7 @@ Lint Aurelia SPA:
   script:
     - npm install --quiet
     - npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives
-  allow_failure: true
+#  allow_failure: true
 
 Build Aurelia SPA:
   stage: build
