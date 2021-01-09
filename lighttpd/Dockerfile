@@ -17,7 +17,7 @@ COPY conf/* /etc/lighttpd/
 COPY lighttpd-docker /usr/local/bin/
 
 # copy document root
-COPY ./htdocs/* /var/www/localhost/htdocs/
+COPY htdocs/* /var/www/localhost/htdocs/
 
 # create cache/compress dir
 RUN mkdir -p /var/lib/lighttpd/cache/compress && chown lighttpd:lighttpd /var/lib/lighttpd/cache/compress

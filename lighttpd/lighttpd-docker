@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # create a special pipe since lighttpd can not access /dev/stderr in docker
 
