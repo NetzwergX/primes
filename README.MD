@@ -1,16 +1,17 @@
 # Primes
-[![Unit Tests (.NET Core)](https://github.com/NetzwergX/Primes/workflows/Unit%20Tests%20(.NET%20Core)/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Unit+Tests+%28.NET+Core%29%22)
-[![Build (Webpack)](https://github.com/NetzwergX/Primes/workflows/Build%20(Webpack)/badge.svg)](https://github.com/NetzwergX/Primes/actions?query=workflow%3A%22Build+%28Webpack%29%22)
-[![Pipeline status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
+[![Pipeline Status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
+[![Coverage Report](https://gitlab.com/s.teumert/primes/badges/master/coverage.svg)](https://gitlab.com/s.teumert/primes/-/commits/master)
 
-A tech demo for .Net Core 3.1, showcasing a full CI/CD pipeline
-for a Web HTTP(S) API which is consumed by an SPA (using Aurelia),
-featuring:
+A Continuos Practices / DevOps tech demo for a modern, cloud based web application.
 
-* Unit tests
+Featuring a single-page application (SPA) written in Aurelia and served via lighttpd
+and a web API, written in DotNet Core 3.1 and Quarkus, deployed via docker containers.
+
+The setup also demonstrates:
+
+* Unit tests (with report generation and coverage tracking)
 * [WIP] Integration tests
-* Benchmarks (report generation, comment on PR [WIP])
-* Vulnerability scanning via CodeQL
+* Benchmarks
 * [WIP] E2E tests
 * [WIP] Load tests
 * [WIP] Stress tests
