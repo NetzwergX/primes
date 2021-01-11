@@ -18,7 +18,7 @@ Build DotNet Core Web Api:
     - cd dotnet-web-api/
     - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
   script:
-    - 'dotnet build --configuration Release --no-restore'  # build the project
+    - 'dotnet publish --configuration Release --no-restore'  # build the project
   artifacts:
     name: prime-api-dotnet
     paths:
@@ -31,7 +31,7 @@ Test DotNet Core Web Api:
     - cd dotnet-web-api/
     - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY'
   script:
-    - 'dotnet publish --configuration Release --no-restore'  # build the project
+    - 'dotnet test --no-restore' /p:CollectCoverage=true
   needs: ['Build DotNet Core Web Api']
 
 Dockerize DotNet Core Web Api:
