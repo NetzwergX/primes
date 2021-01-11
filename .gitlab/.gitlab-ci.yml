@@ -22,7 +22,7 @@ Build DotNet Core Web Api:
   artifacts:
     name: prime-api-dotnet
     paths:
-      - './dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/'
+      - ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/
 
 Test DotNet Core Web Api:
   stage: test
@@ -31,7 +31,19 @@ Test DotNet Core Web Api:
     - cd dotnet-web-api/
     - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
   script:
-    - dotnet test --no-restore /p:CollectCoverage=true
+    - >
+      dotnet test
+      /p:CollectCoverage=true /p:CoverletOutput='../artifacts/coverage.json'
+      --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"
+  coverage: /Total[^|]*\|[^|]*\s+([\d\.]+)/
+  artifacts:
+    when: always
+    paths:
+     - ./dotnet-web-api/**/*test-result.xml
+    reports:
+      junit:
+       - ./dotnet-web-api/**/*test-result.xml
+
   needs: ['Build DotNet Core Web Api']
 
 Dockerize DotNet Core Web Api:
@@ -41,7 +53,6 @@ Dockerize DotNet Core Web Api:
     - docker:dind
   before_script:
     - cd dotnet-web-api/Prime.WebApi/
-    - ls -a bin/Release/netcoreapp3.1/publish/
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE/api-dotnet:$CI_COMMIT_SHORT_SHA"  .
@@ -80,11 +91,10 @@ Dockerize Quarkus Web Api:
     - docker:dind
   before_script:
     - cd quarkus-api/
-    - ls -a target/
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u "$CI_REGISTRY_USER" --password-stdin
   script:
     - docker build -f ./src/main/docker/Dockerfile.jvm -t "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" .
-    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME" # tag or branch name
+    - docker tag  "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA" "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_SHORT_SHA"
     - docker push "$CI_REGISTRY_IMAGE/api-quarkus:$CI_COMMIT_REF_NAME"
   needs: ['Build Quarkus Web Api']

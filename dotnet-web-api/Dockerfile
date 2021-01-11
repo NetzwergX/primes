@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:latest
-WORKDIR /prime/rest-api/
+WORKDIR /prime/web-api-dotnet/
 COPY . .
 RUN dotnet build
 EXPOSE 5000

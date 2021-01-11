@@ -34,7 +34,6 @@ namespace Prime.Tests.Unit.Services
         [InlineData (-1)]
         [InlineData (0)]
         [InlineData (1)]
-        [InlineData (int.MinValue)]
         public void False_For_LessThan_2(int value)
         {
             var result = _service.IsPrime(value);
