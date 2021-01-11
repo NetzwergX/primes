@@ -22,7 +22,7 @@ Build DotNet Core Web Api:
   artifacts:
     name: prime-api-dotnet
     paths:
-      - './dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/'
+      - './dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/'
 
 Test DotNet Core Web Api:
   stage: test
