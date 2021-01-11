@@ -146,8 +146,11 @@ Release:
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   stage: release
   script:
-    - echo "Creating release"
-  needs: ['Build Aurelia SPA', 'Build Quarkus Web Api', 'Build DotNet Core Web Api']
+    - echo "Creating Release"
+  needs:
+    - Build Aurelia SPA
+    - Build Quarkus Web Api
+    - Build DotNet Core Web Api
   only:
     - tags
   release:
@@ -156,29 +159,33 @@ Release:
     tag_name: $CI_COMMIT_TAG
     ref: '$CI_COMMIT_TAG'
 
-Deploy Quarkus:
+Deploy Aurelia & Quarkus:
   stage: deploy
   image: alpine:3.12
   script:
     - echo "fake deploy script"
   environment:
-    name: 'QA Deployment $CI_COMMIT_SHORT_SHA'
-    url: 'https://aurelia+quarkus.example.org/$CI_COMMIT_SHORT_SHA'
+    name: 'QA Staging / DotNet / $CI_COMMIT_TAG'
+    url: 'https://aurelia+quarkus.example.org/$CI_COMMIT_TAG'
   needs:
     - Dockerize Aurelia
     - Dockerize Quarkus Web Api
+  only:
+    - tags
 
-Deploy DotNet Core:
+Deploy Aurelia & DotNet Core:
   stage: deploy
   image: alpine:3.12
   script:
     - echo "fake deploy script"
   environment:
-    name: 'QA Deployment $CI_COMMIT_SHORT_SHA'
-    url: 'https://aurelia+dotnet.example.org/$CI_COMMIT_SHORT_SHA'
+    name: 'QA Staging / Quarkus / $CI_COMMIT_TAG'
+    url: 'https://aurelia+dotnet.example.org/$CI_COMMIT_TAG'
   needs:
     - Dockerize Aurelia
     - Dockerize DotNet Core Web Api
+  only:
+    - tags
 
 # TODO release: add links
 # TODO release: add changelog
