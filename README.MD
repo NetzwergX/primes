@@ -1,6 +1,7 @@
 # Primes
 [![Pipeline Status](https://gitlab.com/s.teumert/primes/badges/master/pipeline.svg)](https://gitlab.com/s.teumert/primes/-/pipelines/latest)
 [![Coverage Report](https://gitlab.com/s.teumert/primes/badges/master/coverage.svg)](https://gitlab.com/s.teumert/primes/-/commits/master)
+[![MIT License](https://user-content.gitlab-static.net/4ec3c3f7ab4f51eb26b9091872f65d29ed6d581f/68747470733a2f2f62616467656e2e6e65742f6769746c61622f6c6963656e73652f732e7465756d6572742f5072696d65733f636f6c6f723d707572706c65)](https://gitlab.com/s.teumert/primes/-/blob/master/LICENSE)
 
 A Continuos Practices / DevOps tech demo for a modern, cloud based web application.
 
@@ -23,17 +24,8 @@ or as native build with Quarkus + GraalVM.
 
 # Usage
 
-    $ git clone git@github.com:NetzwergX/Primes.git
-    $ cd Primes/
-
-    $ pushd dotnet-rest-api/
-    $ dotnet publish -c Release
-    $ popd
-
-    $ pushd aurelia-spa/
-    $ npm install
-    $ popd
-
+    $ git clone git@gitlab.com:s.teumert/primes.git && cd primes/
+    $ pwsh build.ps1
     $ docker-compose up
 
 # License
@@ -51,8 +43,8 @@ Copyright &copy; 2020 Sebastian Teumert &lt;https://sebastian.teumert.net&gt;
 In order to use `dotnet benchmark`,
 you need to run `dotnet tool install -g BenchmarkDotNet.Tool`.
 
-    $ git clone git@github.com:NetzwergX/Primes.git
-    $ cd Primes/rest-api/
+    $ git clone git@gitlab.com:s.teumert/primes.git && cd primes/
+    $ cd web-api/
     $ dotnet build -C Release
     $ dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
 
