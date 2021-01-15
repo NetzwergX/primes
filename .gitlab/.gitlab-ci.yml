@@ -148,6 +148,7 @@ Generate Changelog:
   before_script:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/s.teumert/git-changelog.git
     - sh git-changelog/.gitlab/install-pwsh-alpine.sh
+    - apk update && apk add --no-cache git
   script:
     -- pwsh -NoProfile -File git-changelog/bin/git-changelog.ps1 > CHANGELOG.MD
   artifacts:
