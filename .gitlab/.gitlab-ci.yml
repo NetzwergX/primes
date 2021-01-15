@@ -202,6 +202,4 @@ Deploy Aurelia & DotNet Core:
     - tags
 
 # TODO release: add links
-# TODO release: add changelog
-#   cf. https://stackoverflow.com/questions/30805098/how-to-display-last-n-tags-in-git
 # TODO Except/Only, branches, main
