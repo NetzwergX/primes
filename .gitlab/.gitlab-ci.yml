@@ -150,7 +150,7 @@ Generate Changelog:
     - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/s.teumert/git-changelog.git
     - sh git-changelog/.gitlab/install-pwsh-alpine.sh
   script:
-    -- pwsh -NoProfile -File git-changelog/bin/git-changelog.ps1 > CHANGELOG.MD
+    - pwsh -NoProfile -File git-changelog/bin/git-changelog.ps1 > CHANGELOG.MD
   artifacts:
     paths:
       - CHANGELOG.MD
