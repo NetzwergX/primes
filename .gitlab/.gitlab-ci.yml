@@ -8,6 +8,7 @@ stages:
   - build
   - test
   - dockerize
+  - make-release
   - release
   - deploy
 
@@ -141,6 +142,18 @@ Dockerize Aurelia:
     - docker push "$CI_REGISTRY_IMAGE/web-app:$CI_COMMIT_REF_NAME"
   needs: ['Build Aurelia SPA']
 
+Generate Changelog:
+  stage: make-release
+  image: alpine:3.12
+  before_script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/s.teumert/git-changelog.git
+    - sh git-changelog/.gitlab/install-pwsh-alpine.sh
+  script:
+    -- pwsh -NoProfile -File git-changelog/bin/git-changelog.ps1 > CHANGELOG.MD
+  artifacts:
+    paths:
+      - CHANGELOG.MD
+
 Release:
   # Official docker image.
   image: registry.gitlab.com/gitlab-org/release-cli:latest
@@ -151,11 +164,12 @@ Release:
     - Build Aurelia SPA
     - Build Quarkus Web Api
     - Build DotNet Core Web Api
+    - Generate Changelog
   only:
     - tags
   release:
     name: '$CI_COMMIT_TAG'
-    description:  'Release v$CI_COMMIT_TAG'
+    description:  CHANGELOG.MD
     tag_name: $CI_COMMIT_TAG
     ref: '$CI_COMMIT_TAG'
 
