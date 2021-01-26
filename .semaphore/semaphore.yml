@@ -1,0 +1,126 @@
+version: v1.0
+name: Docker
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+fail_fast:
+  cancel:
+    when: 'true'
+auto_cancel:
+  running:
+    when: 'true'
+blocks:
+  - name: ESLint
+    task:
+      jobs:
+        - name: npx eslint
+          commands:
+            - checkout
+            - nvm use node
+            - cd aurelia-spa/
+            - npm install --quiet
+            - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
+      env_vars:
+        - name: FOO_1
+          value: BAR_1
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: main
+            image: 'semaphoreci/ubuntu:18.04'
+    dependencies: []
+  - name: Webpack Build
+    dependencies:
+      - ESLint
+    task:
+      jobs:
+        - name: npm run build
+          commands:
+            - nvm use node
+            - cd aurelia-spa/
+            - npm install --quiet
+            - npm run build
+  - name: DotNet
+    dependencies: []
+    task:
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: main
+            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
+      jobs:
+        - name: dotnet publish
+          commands:
+            - cd dotnet-web-api/
+            - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
+            - dotnet publish --configuration Release --no-restore
+            - artifact push workflow ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/
+        - name: dotnet test
+          commands:
+            - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+  - name: Dockerize DotNet
+    dependencies:
+      - DotNet
+    task:
+      jobs:
+        - name: docker build
+          commands:
+            - cd dotnet-web-api/Prime.WebApi/
+            - 'docker build --pull -t "primes/api-dotnet:$SEMAPHORE_GIT_SHA"  .'
+  - name: Dockerize SPA
+    dependencies:
+      - Webpack Build
+    task:
+      jobs:
+        - name: docker build
+          commands:
+            - cp ./aurelia-spa/dist/* ./lighttpd/htdocs/
+            - 'docker build -t "primes/web-app:$SEMAPHORE_GIT_SHA" lighttpd/'
+  - name: Generate Changelog
+    dependencies: []
+    task:
+      jobs:
+        - name: git-changelog
+          commands:
+            - echo "Fake Generate Changelog"
+  - name: Generate Release
+    dependencies:
+      - Dockerize DotNet
+      - Dockerize Quarkus
+      - Dockerize SPA
+      - Generate Changelog
+    task:
+      jobs:
+        - name: Upload artifacts
+          commands:
+            - echo "Fake release"
+  - name: Build Quarkus
+    dependencies: []
+    task:
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: main
+            image: ' oracle/graalvm-ce:20.3.0-java11'
+      jobs:
+        - name: mvn package
+          commands:
+            - cd quarkus-api/
+            - chmod +x ./mvnw
+            - ./mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPTS
+  - name: Dockerize Quarkus
+    dependencies:
+      - Build Quarkus
+    task:
+      jobs:
+        - name: docker build
+          commands:
+            - cd quarkus-api/
+            - 'docker build -f ./src/main/docker/Dockerfile.jvm -t "primes/api-quarkus:$SEMAPHORE_GIT_SHA" .'
