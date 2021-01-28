@@ -30,6 +30,10 @@ blocks:
         containers:
           - name: main
             image: 'semaphoreci/ubuntu:18.04'
+      prologue:
+        commands:
+          - nvm install --lts carbon
+          - sem-version node --lts carbon
     dependencies: []
   - name: Webpack Build
     dependencies:
@@ -41,6 +45,10 @@ blocks:
             - cd aurelia-spa/
             - npm install --quiet
             - npm run build
+      prologue:
+        commands:
+          - nvm install --lts carbon
+          - sem-version node --lts carbon
   - name: DotNet
     dependencies: []
     task:
