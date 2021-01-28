@@ -25,8 +25,13 @@ blocks:
           value: BAR_1
       prologue:
         commands:
-          - nvm install --lts carbon
-          - sem-version node --lts carbon
+          - '# Get the latest version of our source code from GitHub:'
+          - checkout
+          - '# Use the version of Node.js specified in .nvmrc.'
+          - '# Semaphore provides nvm preinstalled.'
+          - nvm use
+          - node --version
+          - npm --version
     dependencies: []
   - name: Webpack Build
     dependencies:
@@ -40,8 +45,13 @@ blocks:
             - npm run build
       prologue:
         commands:
-          - nvm install --lts carbon
-          - sem-version node --lts carbon
+          - '# Get the latest version of our source code from GitHub:'
+          - checkout
+          - '# Use the version of Node.js specified in .nvmrc.'
+          - '# Semaphore provides nvm preinstalled.'
+          - nvm use
+          - node --version
+          - npm --version
   - name: DotNet
     dependencies: []
     task:
