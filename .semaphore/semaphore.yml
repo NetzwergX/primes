@@ -152,6 +152,8 @@ blocks:
     task:
       prologue:
         commands:
+          - apt install tree
+          - tree -I 'node_modules|.nuget'
           - cd dotnet-web-api/
       jobs:
         - name: Test
