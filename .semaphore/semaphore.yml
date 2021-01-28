@@ -23,13 +23,6 @@ blocks:
       env_vars:
         - name: FOO_1
           value: BAR_1
-      agent:
-        machine:
-          type: e1-standard-2
-          os_image: ubuntu1804
-        containers:
-          - name: main
-            image: 'semaphoreci/ubuntu:18.04'
       prologue:
         commands:
           - nvm install --lts carbon
