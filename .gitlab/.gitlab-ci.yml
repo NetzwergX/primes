@@ -69,7 +69,7 @@ Dockerize DotNet Core Web Api:
 
 Build Quarkus Web Api:
   stage: build
-  image: oracle/graalvm-ce:20.3.0-java11
+  image: ghcr.io/graalvm/graalvm-ce:latest
   before_script:
     - cd quarkus-api/
   script:
