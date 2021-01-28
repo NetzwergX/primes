@@ -152,7 +152,8 @@ blocks:
     task:
       prologue:
         commands:
-          - apt install tree
+          - sudo apt-get update
+          - sudo apt-get install -y tree
           - tree -I 'node_modules|.nuget'
           - cd dotnet-web-api/
       jobs:
