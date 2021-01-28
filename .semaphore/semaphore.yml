@@ -53,7 +53,7 @@ blocks:
           commands:
             - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
             - dotnet publish --configuration Release --no-restore
-            - artifact push workflow ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ --destination api-dotnet/
+            - artifact push workflow ./Prime.WebApi/bin/Release/netcoreapp3.1/publish/ --destination api-dotnet/
       prologue:
         commands:
           - checkout
@@ -108,7 +108,7 @@ blocks:
           os_image: ubuntu1804
         containers:
           - name: main
-            image: ' oracle/graalvm-ce:20.3.0-java11'
+            image: 'ghcr.io/graalvm/graalvm-ce:latest'
       jobs:
         - name: mvn package
           commands:
