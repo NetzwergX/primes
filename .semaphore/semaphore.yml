@@ -89,16 +89,17 @@ blocks:
       jobs:
         - name: git-changelog
           commands:
-            - echo "Fake Generate Changelog"
+            - echo "Changelog" > CHANGELOG.MD
+            - artifact push workflow CHANGELOG.MD
   - name: Generate Release
     dependencies:
       - 'Dockerize '
       - Generate Changelog
     task:
       jobs:
-        - name: Do some release stuff...
+        - name: Push Release to GitHub
           commands:
-            - echo "Fake release"
+            - artifact pull workflow CHANGELOG.MD
   - name: Build Quarkus API
     dependencies: []
     task:
