@@ -37,13 +37,6 @@ blocks:
           - cache restore
           - npm install --quiet
           - cache store
-      agent:
-        machine:
-          type: e1-standard-2
-          os_image: ubuntu1804
-        containers:
-          - name: main
-            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
     dependencies: []
   - name: Build DotNet API
     dependencies: []
@@ -146,6 +139,13 @@ blocks:
         - name: dotnet benchmark
           commands:
             - dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: main
+            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
   - name: DotNet Test
     dependencies:
       - Build DotNet API
