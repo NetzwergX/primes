@@ -54,7 +54,7 @@ blocks:
           - nvm use
           - node --version
           - npm --version
-  - name: DotNet
+  - name: DotNet Build
     dependencies: []
     task:
       agent:
@@ -69,17 +69,17 @@ blocks:
           commands:
             - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
             - dotnet publish --configuration Release --no-restore
-            - artifact push workflow ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/
-        - name: dotnet test
-          commands:
-            - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+            - artifact push workflow ./Prime.WebApi/bin/Release/netcoreapp3.1/publish/
       prologue:
         commands:
           - checkout
           - cd dotnet-web-api/
+      env_vars:
+        - name: NUGET_PACKAGES_DIRECTORY
+          value: .nuget
   - name: Dockerize DotNet
     dependencies:
-      - DotNet
+      - DotNet Test
     task:
       jobs:
         - name: docker build
@@ -122,13 +122,21 @@ blocks:
           os_image: ubuntu1804
         containers:
           - name: main
-            image: ' oracle/graalvm-ce:20.3.0-java11'
+            image: 'ghcr.io/graalvm/graalvm-ce:latest'
       jobs:
         - name: mvn package
           commands:
-            - cd quarkus-api/
-            - chmod +x ./mvnw
             - ./mvnw $MAVEN_CLI_OPTS clean package $MAVEN_OPTS
+      env_vars:
+        - name: MAVEN_CLI_OPTS
+          value: '--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true'
+        - name: MAVEN_OPTS
+          value: '-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true'
+      prologue:
+        commands:
+          - checkout
+          - cd quarkus-api/
+          - chmod +x ./mvnw
   - name: Dockerize Quarkus
     dependencies:
       - Build Quarkus
@@ -138,3 +146,14 @@ blocks:
           commands:
             - cd quarkus-api/
             - 'docker build -f ./src/main/docker/Dockerfile.jvm -t "primes/api-quarkus:$SEMAPHORE_GIT_SHA" .'
+  - name: DotNet Test
+    dependencies:
+      - DotNet Build
+    task:
+      prologue:
+        commands:
+          - cd dotnet-web-api/
+      jobs:
+        - name: Test
+          commands:
+            - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
