@@ -37,6 +37,13 @@ blocks:
           - cache restore
           - npm install --quiet
           - cache store
+      agent:
+        machine:
+          type: e1-standard-2
+          os_image: ubuntu1804
+        containers:
+          - name: main
+            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
     dependencies: []
   - name: Build DotNet API
     dependencies: []
@@ -54,6 +61,7 @@ blocks:
             - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
             - dotnet publish --configuration Release --no-restore
             - artifact push workflow ./Prime.WebApi/bin/Release/netcoreapp3.1/publish/ --destination api-dotnet/
+            - artifact push workflow ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/ --destination api-dotnet-benchmarks/
       prologue:
         commands:
           - checkout
@@ -131,12 +139,13 @@ blocks:
       prologue:
         commands:
           - checkout
+          - cd dotnet-web-api/
+          - artifact pull workflow api-dotnet-benchmark/ --destination ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/
+          - dotnet tool install -g BenchmarkDotNet.Tool
       jobs:
         - name: dotnet benchmark
           commands:
-            - checkout
-            - cd dotnet-web-api/
-            - 'artifact pull workflow api-dotnet/ --destination ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ '
+            - dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
   - name: DotNet Test
     dependencies:
       - Build DotNet API
