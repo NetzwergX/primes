@@ -1,5 +1,5 @@
 version: v1.0
-name: Docker
+name: Build And Release
 agent:
   machine:
     type: e1-standard-2
@@ -17,7 +17,6 @@ blocks:
         - name: npx eslint
           commands:
             - checkout
-            - nvm use node
             - cd aurelia-spa/
             - npm install --quiet
             - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
@@ -39,7 +38,6 @@ blocks:
       jobs:
         - name: npm run build
           commands:
-            - nvm use node
             - cd aurelia-spa/
             - npm install --quiet
             - npm run build
