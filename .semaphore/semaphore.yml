@@ -16,8 +16,8 @@ blocks:
       jobs:
         - name: npx eslint
           commands:
-            - checkout
-            - cd aurelia-spa/
+            - '# checkout'
+            - '# cd aurelia-spa/'
             - npm install --quiet
             - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
       env_vars:
@@ -27,6 +27,7 @@ blocks:
         commands:
           - '# Get the latest version of our source code from GitHub:'
           - checkout
+          - cd aurelia-spa/
           - '# Use the version of Node.js specified in .nvmrc.'
           - '# Semaphore provides nvm preinstalled.'
           - nvm use
@@ -47,6 +48,7 @@ blocks:
         commands:
           - '# Get the latest version of our source code from GitHub:'
           - checkout
+          - cd aurelia-spa/
           - '# Use the version of Node.js specified in .nvmrc.'
           - '# Semaphore provides nvm preinstalled.'
           - nvm use
