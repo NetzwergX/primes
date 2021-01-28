@@ -67,13 +67,16 @@ blocks:
       jobs:
         - name: dotnet publish
           commands:
-            - cd dotnet-web-api/
             - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
             - dotnet publish --configuration Release --no-restore
             - artifact push workflow ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/
         - name: dotnet test
           commands:
             - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
+      prologue:
+        commands:
+          - checkout
+          - cd dotnet-web-api/
   - name: Dockerize DotNet
     dependencies:
       - DotNet
