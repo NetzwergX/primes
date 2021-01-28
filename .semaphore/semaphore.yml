@@ -11,15 +11,16 @@ auto_cancel:
   running:
     when: 'true'
 blocks:
-  - name: ESLint
+  - name: Build Aurelia SPA
     task:
       jobs:
         - name: npx eslint
           commands:
-            - '# checkout'
-            - '# cd aurelia-spa/'
-            - npm install --quiet
             - 'npx eslint ./src --ext .ts,.tsx --report-unused-disable-directives'
+        - name: npm run build
+          commands:
+            - npm run build
+            - artifact push workflow ./dist/ --destination aurelia-spa
       env_vars:
         - name: FOO_1
           value: BAR_1
@@ -33,28 +34,11 @@ blocks:
           - nvm use
           - node --version
           - npm --version
+          - cache restore
+          - npm install --quiet
+          - cache store
     dependencies: []
-  - name: Webpack Build
-    dependencies:
-      - ESLint
-    task:
-      jobs:
-        - name: npm run build
-          commands:
-            - cd aurelia-spa/
-            - npm install --quiet
-            - npm run build
-      prologue:
-        commands:
-          - '# Get the latest version of our source code from GitHub:'
-          - checkout
-          - cd aurelia-spa/
-          - '# Use the version of Node.js specified in .nvmrc.'
-          - '# Semaphore provides nvm preinstalled.'
-          - nvm use
-          - node --version
-          - npm --version
-  - name: DotNet Build
+  - name: Build DotNet API
     dependencies: []
     task:
       agent:
@@ -69,7 +53,7 @@ blocks:
           commands:
             - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
             - dotnet publish --configuration Release --no-restore
-            - artifact push workflow ./Prime.WebApi/bin/Release/netcoreapp3.1/publish/
+            - artifact push workflow ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ --destination api-dotnet/
       prologue:
         commands:
           - checkout
@@ -77,24 +61,28 @@ blocks:
       env_vars:
         - name: NUGET_PACKAGES_DIRECTORY
           value: .nuget
-  - name: Dockerize DotNet
+  - name: 'Dockerize '
     dependencies:
+      - Build Aurelia SPA
+      - Build Quarkus API
       - DotNet Test
     task:
       jobs:
-        - name: docker build
+        - name: docker build primes/api-dotnet
           commands:
             - cd dotnet-web-api/Prime.WebApi/
             - 'docker build --pull -t "primes/api-dotnet:$SEMAPHORE_GIT_SHA"  .'
-  - name: Dockerize SPA
-    dependencies:
-      - Webpack Build
-    task:
-      jobs:
-        - name: docker build
+        - name: docker build primes/api-quarkus
           commands:
-            - cp ./aurelia-spa/dist/* ./lighttpd/htdocs/
+            - cd quarkus-api/
+            - 'docker build -f ./src/main/docker/Dockerfile.jvm -t "primes/api-quarkus:$SEMAPHORE_GIT_SHA" .'
+        - name: docker build primes/web-app
+          commands:
+            - artifact pull workflow aurelia-spa --destination lighttpd/htdocs
             - 'docker build -t "primes/web-app:$SEMAPHORE_GIT_SHA" lighttpd/'
+      prologue:
+        commands:
+          - checkout
   - name: Generate Changelog
     dependencies: []
     task:
@@ -104,16 +92,14 @@ blocks:
             - echo "Fake Generate Changelog"
   - name: Generate Release
     dependencies:
-      - Dockerize DotNet
-      - Dockerize Quarkus
-      - Dockerize SPA
+      - 'Dockerize '
       - Generate Changelog
     task:
       jobs:
-        - name: Upload artifacts
+        - name: Do some release stuff...
           commands:
             - echo "Fake release"
-  - name: Build Quarkus
+  - name: Build Quarkus API
     dependencies: []
     task:
       agent:
@@ -122,7 +108,7 @@ blocks:
           os_image: ubuntu1804
         containers:
           - name: main
-            image: 'ghcr.io/graalvm/graalvm-ce:latest'
+            image: ' oracle/graalvm-ce:20.3.0-java11'
       jobs:
         - name: mvn package
           commands:
@@ -137,26 +123,29 @@ blocks:
           - checkout
           - cd quarkus-api/
           - chmod +x ./mvnw
-  - name: Dockerize Quarkus
+  - name: DotNet Benchmark
     dependencies:
-      - Build Quarkus
-    task:
-      jobs:
-        - name: docker build
-          commands:
-            - cd quarkus-api/
-            - 'docker build -f ./src/main/docker/Dockerfile.jvm -t "primes/api-quarkus:$SEMAPHORE_GIT_SHA" .'
-  - name: DotNet Test
-    dependencies:
-      - DotNet Build
+      - Build DotNet API
     task:
       prologue:
         commands:
-          - sudo apt-get update
-          - sudo apt-get install -y tree
-          - tree -I 'node_modules|.nuget'
-          - cd dotnet-web-api/
+          - checkout
       jobs:
-        - name: Test
+        - name: dotnet benchmark
+          commands:
+            - checkout
+            - cd dotnet-web-api/
+            - 'artifact pull workflow api-dotnet/ --destination ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ '
+  - name: DotNet Test
+    dependencies:
+      - Build DotNet API
+    task:
+      prologue:
+        commands:
+          - checkout
+          - cd dotnet-web-api/
+          - 'artifact pull workflow api-dotnet/ --destination ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ '
+      jobs:
+        - name: dotnet test
           commands:
             - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
