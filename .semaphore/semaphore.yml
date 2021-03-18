@@ -38,41 +38,12 @@ blocks:
           - npm install --quiet
           - cache store
     dependencies: []
-  - name: Build DotNet API
-    dependencies: []
-    task:
-      agent:
-        machine:
-          type: e1-standard-2
-          os_image: ubuntu1804
-        containers:
-          - name: main
-            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
-      jobs:
-        - name: dotnet publish
-          commands:
-            - dotnet restore --packages $NUGET_PACKAGES_DIRECTORY
-            - dotnet publish --configuration Release --no-restore
-            - artifact push workflow ./Prime.WebApi/bin/Release/netcoreapp3.1/publish/ --destination api-dotnet/
-            - artifact push workflow ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/ --destination api-dotnet-benchmarks/
-      prologue:
-        commands:
-          - checkout
-          - cd dotnet-web-api/
-      env_vars:
-        - name: NUGET_PACKAGES_DIRECTORY
-          value: .nuget
   - name: 'Dockerize '
     dependencies:
       - Build Aurelia SPA
       - Build Quarkus API
-      - DotNet Test
     task:
       jobs:
-        - name: docker build primes/api-dotnet
-          commands:
-            - cd dotnet-web-api/Prime.WebApi/
-            - 'docker build --pull -t "primes/api-dotnet:$SEMAPHORE_GIT_SHA"  .'
         - name: docker build primes/api-quarkus
           commands:
             - cd quarkus-api/
@@ -125,45 +96,8 @@ blocks:
           - checkout
           - cd quarkus-api/
           - chmod +x ./mvnw
-  - name: DotNet Benchmark
-    dependencies:
-      - Build DotNet API
-    task:
-      prologue:
-        commands:
-          - checkout
-          - cd dotnet-web-api/
-          - artifact pull workflow api-dotnet-benchmarks/ --destination ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/
-          - dotnet tool install -g BenchmarkDotNet.Tool
-          - dotnet tool restore
-      jobs:
-        - name: dotnet benchmark
-          commands:
-            - dotnet benchmark ./Prime.Service.Benchmarks/bin/Release/netstandard2.0/Prime.Service.Benchmarks.dll --filter * --runtimes net472 netcoreapp3.1 Mono
-      agent:
-        machine:
-          type: e1-standard-2
-          os_image: ubuntu1804
-        containers:
-          - name: main
-            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
-  - name: DotNet Test
-    dependencies:
-      - Build DotNet API
-    task:
-      prologue:
-        commands:
-          - checkout
-          - cd dotnet-web-api/
-          - 'artifact pull workflow api-dotnet/ --destination ./dotnet-web-api/Prime.WebApi/bin/Release/netcoreapp3.1/publish/ '
-      jobs:
-        - name: dotnet test
-          commands:
-            - 'dotnet test /p:CollectCoverage=true /p:CoverletOutput=''../artifacts/coverage.json'' --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
-      agent:
-        machine:
-          type: e1-standard-2
-          os_image: ubuntu1804
-        containers:
-          - name: main
-            image: 'mcr.microsoft.com/dotnet/core/sdk:latest'
+promotions:
+  - name: Production
+    pipeline_file: pipeline_2.yml
+  - name: Deploy
+    pipeline_file: pipeline_3.yml
